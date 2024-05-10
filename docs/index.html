@@ -1,36 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title>Document3333</title>
-  
+  <title>一个测试网站</title>
+  <style>
+
+  </style>
 </head>
+
 <body>
-  
+
   <ul>
-    <li><a href="">Link</a></li>
-    <li>
-      <textarea type="text" id="myInput" rows="4"></textarea>
+    <ul>
+      
+      <textarea type="text" id="myInput" rows="4" cols="80"></textarea>
       <div>
-        <button onclick="openLink()">打开链接</button>  
+        <button onclick="openLink()">打开链接</button>
         <button onclick="clearInput()">清空</button>
       </div>
-      
-    </li>
+    </ul>
   </ul>
   <script>
 
     function openLink() {
-        // 获取输入框的值
+      // 获取输入框的值
       var url = document.getElementById("myInput").value;
-  
       // 打开新的窗口或标签页
       window.open(url, '_blank');
     }
 
     function clearInput() {
-        var input = document.getElementById("myInput");
-        input.value = "";
+      var input = document.getElementById("myInput");
+      input.value = "";
     }
   </script>
   <!-- Docsify v4 -->
@@ -38,4 +40,5 @@
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
   -->
 </body>
+
 </html>
