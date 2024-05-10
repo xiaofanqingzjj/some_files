@@ -47,10 +47,11 @@
 
   <p>测试OpenButton</p>
 
-  <input type="text" id="inputScheme" placeholder="助手的scheme，比如:cfpage://" />
-  <input type="text" id="inputType" placeholder="OpenButton的type,比如10003表示打开网页" />
-  <textarea type="text" id="inputUri" rows="4" placeholder="OpenButton的uri，不同的type有不同的类型, 10003这里应该填网页地址，10042这里应该填flutter路由地址" ></textarea>
-  <textarea type="text" id="inputParams" rows="4" placeholder='参数，必须是json格式，比如:{"key":value, "key2": 22}'></textarea>
+  <input type="text" id="inputScheme" placeholder="scheme, 比如:cfpage" />
+  <input type="text" id="inputType" placeholder="type, OpenButton的type,比如10003表示打开网页" />
+  <textarea type="text" id="inputUri" rows="4" placeholder="uri, OpenButton的uri，不同的type有不同的类型, 10003这里应该填网页地址，10042这里应该填flutter路由地址" ></textarea>
+  <textarea type="text" id="inputParams" rows="4" placeholder='params，必须是json格式，比如:{"key":value, "key2": 22}'></textarea>
+  <textarea type="text" id="inputOtherParams" rows="4" placeholder='others，和button同一级的其他参数，必须是json格式，比如:{"key":value, "key2": 22}'></textarea>
 
   <div>
     <button onclick="openButton()">OpenButton</button>
@@ -98,6 +99,9 @@
       var type = document.getElementById("inputType").value;
       var uri = document.getElementById("inputUri").value;
       var params = document.getElementById("inputParams").value;
+      var otherParams = document.getElementById("inputOtherParams").value;
+
+
 
       // 保存输入框的值
       localStorage.setItem("inputScheme", scheme);
@@ -112,6 +116,14 @@
         uri: uri,
         params: params.length > 0 ? JSON.parse(params) : ""
       };
+
+      if (otherParams.length > 0) {
+        otherParams = JSON.parse(otherParams);
+      }
+
+      button = Object.assign(button, otherParams);
+
+
       console.log(`button: ${button}`);
 
       scheme = `${scheme}://webopenapi/startApp?action=20003&button=${encodeURIComponent(JSON.stringify(button))}`;
