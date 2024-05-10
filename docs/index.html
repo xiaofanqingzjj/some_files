@@ -12,11 +12,22 @@
   
   <ul>
     <li><a href="">Link</a></li>
+    <li>
+      <input type="text" id="myInput" />
+      <button onclick="openLink()">打开链接</button>
+    </li>
   </ul>
   <script>
     window.$docsify = {
       name: '',
       repo: ''
+    }
+    function openLink() {
+        // 获取输入框的值
+      var url = document.getElementById("myInput").value;
+  
+      // 打开新的窗口或标签页
+      window.open(url, '_blank');
     }
   </script>
   <!-- Docsify v4 -->
