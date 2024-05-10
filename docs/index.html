@@ -16,6 +16,11 @@
       width: 100%;
     }
 
+    input {
+      width: 100%;
+      margin: 0 auto;
+    }
+
     .container {
       max-width: 600px;
       margin: 0 auto;
@@ -24,8 +29,7 @@
 
 
     @media (max-width: 600px) {
-      body {
-      }
+      body {}
     }
   </style>
 </head>
@@ -35,24 +39,91 @@
   <p>在输入框里输入打开助手的Scheme然后点击打开链接</p>
   <textarea type="text" id="myInput" rows="4"></textarea>
   <div>
-    <button onclick="openLink()">打开链接</button>
-    <button onclick="clearInput()">清空</button>
+    <button onclick="openSchemeLink()">打开链接</button>
+    <button onclick="clearSchemeInput()">清空</button>
   </div>
+
+  <p>测试OpenButton</p>
+  <div>
+    scheme: <input type="text" id="inputScheme" rows="4"></input>
+  </div>
+  <div>
+    type: <input type="text" id="inputType" rows="4"></input>
+  </div>
+  <div>
+    uri: <input type="text" id="inputUri" rows="4"></input>
+  </div>
+  <div>
+    params: <textarea type="text" id="inputParams" rows="4"></textarea>
+  </div>
+
+  <div>
+    <button onclick="openButton()">OpenButton</button>
+    <button onclick="clearInput()">Clear</button>
+  </div>
+
+
+
 
   <script>
 
-    function openLink() {
+    // 恢复上次使用的输入值
+    function restoreInputValue() {
+      var input = document.getElementById("myInput");
+      input.value = localStorage.getItem("myInput");
+
+      document.getElementById("inputScheme").value = localStorage.getItem("inputScheme");
+      document.getElementById("inputType").value = localStorage.getItem("inputType");
+      document.getElementById("inputUri").value = localStorage.getItem("inputUri");
+      document.getElementById("inputParams").value = localStorage.getItem("inputParams");
+    }
+
+    restoreInputValue();
+
+    function openSchemeLink() {
       // 获取输入框的值
-      var url = document.getElementById("myInput").value;
+      var url = document.getElementById('myInput').value;
+      localStorage.setItem("myInput", url)
       // 打开新的窗口或标签页
       window.open(url, '_blank');
     }
 
-    function clearInput() {
+    function clearSchemeInput() {
       var input = document.getElementById("myInput");
       input.value = "";
       input.focus();
     }
+
+
+    function openButton() {
+      var scheme = document.getElementById("inputScheme").value;
+      var type = document.getElementById("inputType").value;
+      var uri = document.getElementById("inputUri").value;
+      var params = document.getElementById("inputParams").value;
+
+      // 保存输入框的值
+      localStorage.setItem("inputScheme", scheme);
+      localStorage.setItem("inputType", type);
+      localStorage.setItem("inputUri", uri);
+      localStorage.setItem("inputParams", params);
+
+     
+      var button = {
+        type: type,
+        uri: uri,
+        params : params.length > 0 ? JSON.parse(params) : ""
+      };
+      scheme = `${scheme}://webopenapi/startApp?action=20003&button=${encodeURIComponent(JSON.stringify(button))}`;
+      window.open(scheme, '_blank');
+
+    }
+
+    function clearInput() {
+      document.getElementById("inputType").value = "";
+      document.getElementById("inputUri").value = "";
+      document.getElementById("inputParams").value = "";
+    }
+
   </script>
 </body>
 
