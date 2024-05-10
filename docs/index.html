@@ -12,13 +12,15 @@
     }
 
     textarea {
-      margin: 0 auto;
+      margin: 4px auto;
       width: 100%;
+      font-size: 12px;
     }
 
     input {
       width: 100%;
-      margin: 0 auto;
+      margin: 4px auto;
+      font-size: 12px;
     }
 
     .container {
@@ -37,25 +39,18 @@
 <body>
   <h2>助手Scheme测试页面</h2>
   <p>在输入框里输入打开助手的Scheme然后点击打开链接</p>
-  <textarea type="text" id="myInput" rows="4"></textarea>
+  <textarea type="text" id="myInput" rows="4" placeholder="输入打开助手的scheme"></textarea>
   <div>
     <button onclick="openSchemeLink()">打开链接</button>
     <button onclick="clearSchemeInput()">清空</button>
   </div>
 
   <p>测试OpenButton</p>
-  <div>
-    scheme: <input type="text" id="inputScheme" rows="4"></input>
-  </div>
-  <div>
-    type: <input type="text" id="inputType" rows="4"></input>
-  </div>
-  <div>
-    uri: <input type="text" id="inputUri" rows="4"></input>
-  </div>
-  <div>
-    params: <textarea type="text" id="inputParams" rows="4"></textarea>
-  </div>
+
+  <input type="text" id="inputScheme" placeholder="助手的scheme，比如:cfpage://" />
+  <input type="text" id="inputType" placeholder="OpenButton的type,比如10003表示打开网页" />
+  <textarea type="text" id="inputUri" rows="4" placeholder="OpenButton的uri，不同的type有不同的类型, 10003这里应该填网页地址，10042这里应该填flutter路由地址" ></textarea>
+  <textarea type="text" id="inputParams" rows="4" placeholder='参数，必须是json格式，比如:{"key":value, "key2": 22}'></textarea>
 
   <div>
     <button onclick="openButton()">OpenButton</button>
@@ -84,8 +79,10 @@
       // 获取输入框的值
       var url = document.getElementById('myInput').value;
       localStorage.setItem("myInput", url)
-      // 打开新的窗口或标签页
-      window.open(url, '_blank');
+      if (url.length > 0) {
+        // 打开新的窗口或标签页
+        window.open(url, '_blank');
+      }
     }
 
     function clearSchemeInput() {
@@ -96,6 +93,7 @@
 
 
     function openButton() {
+
       var scheme = document.getElementById("inputScheme").value;
       var type = document.getElementById("inputType").value;
       var uri = document.getElementById("inputUri").value;
@@ -107,21 +105,27 @@
       localStorage.setItem("inputUri", uri);
       localStorage.setItem("inputParams", params);
 
-     
+      console.log(params);
+
       var button = {
         type: type,
         uri: uri,
-        params : params.length > 0 ? JSON.parse(params) : ""
+        params: params.length > 0 ? JSON.parse(params) : ""
       };
+      console.log(`button: ${button}`);
+
       scheme = `${scheme}://webopenapi/startApp?action=20003&button=${encodeURIComponent(JSON.stringify(button))}`;
       window.open(scheme, '_blank');
 
     }
 
     function clearInput() {
+      document.getElementById("inputScheme").value = "";
       document.getElementById("inputType").value = "";
       document.getElementById("inputUri").value = "";
       document.getElementById("inputParams").value = "";
+
+      localStorage.clear();
     }
 
   </script>
