@@ -10,8 +10,12 @@
   <ul>
     <li><a href="">Link</a></li>
     <li>
-      <input type="text" id="myInput" />
-      <button onclick="openLink()">打开链接</button>
+      <textarea type="text" id="myInput" rows="4" />
+      <div>
+        <button onclick="openLink()">打开链接</button>  
+        <button onclick="clearInput()">清空</button>
+      </div>
+      
     </li>
   </ul>
   <script>
@@ -22,6 +26,11 @@
   
       // 打开新的窗口或标签页
       window.open(url, '_blank');
+    }
+
+    function clearInput() {
+        var input = document.getElementById("myInput");
+        input.value = "";
     }
   </script>
   <!-- Docsify v4 -->
