@@ -4,23 +4,41 @@
 <head>
   <meta charset="UTF-8">
   <title>一个测试网站</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
+    body {
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
 
+    textarea {
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+
+
+    @media (max-width: 600px) {
+      body {
+      }
+    }
   </style>
 </head>
 
 <body>
+  <h2>助手Scheme测试页面</h2>
+  <p>在输入框里输入打开助手的Scheme然后点击打开链接</p>
+  <textarea type="text" id="myInput" rows="4"></textarea>
+  <div>
+    <button onclick="openLink()">打开链接</button>
+    <button onclick="clearInput()">清空</button>
+  </div>
 
-  <ul>
-    <ul>
-      
-      <textarea type="text" id="myInput" rows="4" cols="80"></textarea>
-      <div>
-        <button onclick="openLink()">打开链接</button>
-        <button onclick="clearInput()">清空</button>
-      </div>
-    </ul>
-  </ul>
   <script>
 
     function openLink() {
@@ -33,12 +51,9 @@
     function clearInput() {
       var input = document.getElementById("myInput");
       input.value = "";
+      input.focus();
     }
   </script>
-  <!-- Docsify v4 -->
-  <!--
-  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
-  -->
 </body>
 
 </html>
