@@ -14,13 +14,37 @@
     textarea {
       margin: 4px auto;
       width: 100%;
-      font-size: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #fff;
+      padding: 8px;
+      font-size: 14px;
     }
 
     input {
       width: 100%;
       margin: 4px auto;
-      font-size: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #fff;
+      padding: 8px;
+      font-size: 14px;
+    }
+
+    select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #333;
+            font-size: 14px;
+        }
+
+    .fill_width {
+      width: 100%;
     }
 
     .container {
@@ -47,7 +71,14 @@
 
   <p>测试OpenButton</p>
 
-  <input type="text" id="inputScheme" placeholder="scheme, 比如:cfpage" />
+  <select id="inputScheme" class="fill_width">
+    <option value="cfpage">cf(cfpage)</option>
+    <option value="dnfgamehelper">dnf(dnfgamehelper)</option>
+    <option value="speedgamehelper">掌飞(speedgamehelper)</option>
+    <option value="lostarkgamehelper">方舟(lostarkgamehelper)</option>
+  </select>
+
+  <!-- <input type="text" id="inputScheme" placeholder="scheme, 比如:cfpage" /> -->
   <input type="text" id="inputType" placeholder="type, OpenButton的type,比如10003表示打开网页" />
   <textarea type="text" id="inputUri" rows="4" placeholder="uri, OpenButton的uri，不同的type有不同的类型, 10003这里应该填网页地址，10042这里应该填flutter路由地址" ></textarea>
   <textarea type="text" id="inputParams" rows="4" placeholder='params，必须是json格式，比如:{"key":value, "key2": 22}'></textarea>
@@ -63,22 +94,34 @@
 
   <script>
 
+    // 获取输入框的值
+    function getInputValue(id) {
+      return document.getElementById(id).value;
+    }
+
+    // 设置输入框的值
+    function setInputValue(id, value) {
+      let input = document.getElementById(id)
+      input.value = value;
+      return input;
+    }
+
+
     // 恢复上次使用的输入值
     function restoreInputValue() {
-      var input = document.getElementById("myInput");
-      input.value = localStorage.getItem("myInput");
-
-      document.getElementById("inputScheme").value = localStorage.getItem("inputScheme");
-      document.getElementById("inputType").value = localStorage.getItem("inputType");
-      document.getElementById("inputUri").value = localStorage.getItem("inputUri");
-      document.getElementById("inputParams").value = localStorage.getItem("inputParams");
+      setInputValue('myInput', localStorage.getItem("myInput"));
+      setInputValue('inputScheme', localStorage.getItem("inputScheme"));
+      setInputValue('inputType', localStorage.getItem("inputType"));
+      setInputValue('inputUri', localStorage.getItem("inputUri"));
+      setInputValue('inputParams', localStorage.getItem("inputParams"));
     }
 
     restoreInputValue();
 
+  
     function openSchemeLink() {
       // 获取输入框的值
-      var url = document.getElementById('myInput').value;
+      let url = getInputValue('myInput');
       localStorage.setItem("myInput", url)
       if (url.length > 0) {
         // 打开新的窗口或标签页
@@ -87,19 +130,17 @@
     }
 
     function clearSchemeInput() {
-      var input = document.getElementById("myInput");
-      input.value = "";
-      input.focus();
+      setInputValue('myInput', "").focus();
     }
 
 
     function openButton() {
 
-      var scheme = document.getElementById("inputScheme").value;
-      var type = document.getElementById("inputType").value;
-      var uri = document.getElementById("inputUri").value;
-      var params = document.getElementById("inputParams").value;
-      var otherParams = document.getElementById("inputOtherParams").value;
+      let scheme = getInputValue("inputScheme");
+      let type = getInputValue("inputType");
+      let uri = getInputValue("inputUri");
+      let params = getInputValue("inputParams");
+      let otherParams = getInputValue("inputOtherParams");
 
 
 
@@ -111,7 +152,7 @@
 
       console.log(params);
 
-      var button = {
+      let button = {
         type: type,
         uri: uri,
         param: params
@@ -132,10 +173,10 @@
     }
 
     function clearInput() {
-      document.getElementById("inputScheme").value = "";
-      document.getElementById("inputType").value = "";
-      document.getElementById("inputUri").value = "";
-      document.getElementById("inputParams").value = "";
+      setInputValue("inputScheme", "");
+      setInputValue("inputType", "");
+      setInputValue("inputUri", "");
+      setInputValue("inputParams", "");
 
       localStorage.clear();
     }
