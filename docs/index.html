@@ -32,16 +32,15 @@
     }
 
     select {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #fff;
-            color: #333;
-            font-size: 14px;
-        }
+        padding: 8px;
+        width: 100%;
+        margin: 4px auto;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff;
+        color: #333;
+        font-size: 14px;
+    }
 
     .fill_width {
       width: 100%;
@@ -71,15 +70,17 @@
 
   <p>测试OpenButton</p>
 
-  <select id="inputScheme" class="fill_width">
-    <option value="cfpage">cf(cfpage)</option>
-    <option value="dnfgamehelper">dnf(dnfgamehelper)</option>
-    <option value="speedgamehelper">掌飞(speedgamehelper)</option>
-    <option value="lostarkgamehelper">方舟(lostarkgamehelper)</option>
+  <select id="inputScheme"  class="fill_width">
+    <option disabled selected value="">选择要打开助手的Scheme</option>
   </select>
 
+  <select id="inputType"  class="fill_width">
+    <option disabled selected value="">type, OpenButton的type,比如10003表示打开网页</option>
+  </select>
+
+
   <!-- <input type="text" id="inputScheme" placeholder="scheme, 比如:cfpage" /> -->
-  <input type="text" id="inputType" placeholder="type, OpenButton的type,比如10003表示打开网页" />
+  <!-- <input type="text" id="inputType" placeholder="type, OpenButton的type,比如10003表示打开网页" /> -->
   <textarea type="text" id="inputUri" rows="4" placeholder="uri, OpenButton的uri，不同的type有不同的类型, 10003这里应该填网页地址，10042这里应该填flutter路由地址" ></textarea>
   <textarea type="text" id="inputParams" rows="4" placeholder='params，必须是json格式，比如:{"key":value, "key2": 22}'></textarea>
   <textarea type="text" id="inputOtherParams" rows="4" placeholder='others，和button同一级的其他参数，必须是json格式，比如:{"key":value, "key2": 22}'></textarea>
@@ -94,6 +95,8 @@
 
   <script>
 
+    // 一些工具函数
+
     // 获取输入框的值
     function getInputValue(id) {
       return document.getElementById(id).value;
@@ -106,19 +109,18 @@
       return input;
     }
 
-
-    // 恢复上次使用的输入值
-    function restoreInputValue() {
-      setInputValue('myInput', localStorage.getItem("myInput"));
-      setInputValue('inputScheme', localStorage.getItem("inputScheme"));
-      setInputValue('inputType', localStorage.getItem("inputType"));
-      setInputValue('inputUri', localStorage.getItem("inputUri"));
-      setInputValue('inputParams', localStorage.getItem("inputParams"));
+    // 给action添加选项
+  function addSelectOption(selectId, value, text) {
+      let select = document.getElementById(selectId)
+      let option = document.createElement('option');
+      option.value = value;
+      option.text = text;
+      select.appendChild(option);
+      return option;
     }
 
-    restoreInputValue();
 
-  
+
     function openSchemeLink() {
       // 获取输入框的值
       let url = getInputValue('myInput');
@@ -180,6 +182,66 @@
 
       localStorage.clear();
     }
+
+    (function () {
+
+      // 给scheme输入添加选择框
+      let schemes = {
+        "cfpage": 'cf(cfpage://)',
+        "dnfgamehelper": 'dnf(dnfgamehelper://)',
+        "speedgamehelper": 'speed(speedgamehelper://)',
+        "lostarkgamehelper": 'lostark(lostarkgamehelper://)'
+      }
+
+      for (let key in schemes) {
+        addSelectOption('inputScheme', key, schemes[key]);
+      }
+      
+
+      // type
+      let types = {
+        '10001': '打开活动(10001)',
+        '10002': '资讯列表(10002)',
+        '10003': '普通网页(10003)',
+        '10004': '普通网页，要验证角色(10004)',
+        '10032': '顶部带切角色按钮的网页(10032)',
+        '10033': '底部带切角色按钮的网页(10033)',
+        '10005': '本地路由(10005)',
+        '10015': '个人主页(10015)',
+        '10019': '切换首页底栏(10019)',
+        '10020': '打开聊天室(10020)',
+        '10021': '打开特定的游戏(10021)',
+        '10026': '打开圈子(10026)',
+        '10030': '打开私聊(10030)',
+        '10042': '打开Flutter页面(10042)',
+        '10044': '启动游戏(10044)',
+        
+      }
+
+      for (let key in types) {
+        addSelectOption('inputType', key, types[key]);
+      }
+      
+
+      setInputValue('myInput', localStorage.getItem("myInput"));
+
+      let savedScheme = localStorage.getItem("inputScheme");
+      if (savedScheme !== null) {
+        setInputValue('inputScheme', localStorage.getItem("inputScheme"));
+      }
+      
+      let savedType = localStorage.getItem("inputType");
+      if (savedType != null) {
+        setInputValue('inputType', localStorage.getItem("inputType"));
+      }
+
+      setInputValue('inputUri', localStorage.getItem("inputUri"));
+      setInputValue('inputParams', localStorage.getItem("inputParams"));
+
+
+    })();
+
+  
 
   </script>
 </body>
