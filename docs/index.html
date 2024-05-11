@@ -32,14 +32,14 @@
     }
 
     select {
-        padding: 8px;
-        width: 100%;
-        margin: 4px auto;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        background-color: #fff;
-        color: #333;
-        font-size: 14px;
+      padding: 8px;
+      width: 100%;
+      margin: 4px auto;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #fff;
+      color: #333;
+      font-size: 14px;
     }
 
     .fill_width {
@@ -70,20 +70,20 @@
 
   <p>测试OpenButton</p>
 
-  <select id="inputScheme"  class="fill_width">
+  <select id="inputScheme" class="fill_width">
     <option disabled selected value="">选择要打开助手的Scheme</option>
   </select>
 
-  <select id="inputType"  class="fill_width">
+  <select id="inputType" class="fill_width">
     <option disabled selected value="">type, OpenButton的type,比如10003表示打开网页</option>
   </select>
 
-
-  <!-- <input type="text" id="inputScheme" placeholder="scheme, 比如:cfpage" /> -->
-  <!-- <input type="text" id="inputType" placeholder="type, OpenButton的type,比如10003表示打开网页" /> -->
-  <textarea type="text" id="inputUri" rows="4" placeholder="uri, OpenButton的uri，不同的type有不同的类型, 10003这里应该填网页地址，10042这里应该填flutter路由地址" ></textarea>
-  <textarea type="text" id="inputParams" rows="4" placeholder='params，必须是json格式，比如:{"key":value, "key2": 22}'></textarea>
-  <textarea type="text" id="inputOtherParams" rows="4" placeholder='others，和button同一级的其他参数，必须是json格式，比如:{"key":value, "key2": 22}'></textarea>
+  <textarea type="text" id="inputUri" rows="4"
+    placeholder="uri, OpenButton的uri，不同的type有不同的类型, 10003这里应该填网页地址，10042这里应该填flutter路由地址"></textarea>
+  <textarea type="text" id="inputParams" rows="4"
+    placeholder='params，必须是json格式，比如:{"key":value, "key2": 22}'></textarea>
+  <textarea type="text" id="inputOtherParams" rows="4"
+    placeholder='others，和button同一级的其他参数，必须是json格式，比如:{"key":value, "key2": 22}'></textarea>
 
   <div>
     <button onclick="openButton()">OpenButton</button>
@@ -110,7 +110,7 @@
     }
 
     // 给action添加选项
-  function addSelectOption(selectId, value, text) {
+    function addSelectOption(selectId, value, text) {
       let select = document.getElementById(selectId)
       let option = document.createElement('option');
       option.value = value;
@@ -183,8 +183,8 @@
       localStorage.clear();
     }
 
-    (function () {
-
+    // 设置select框的选项
+    function setupSelectOption() {
       // 给scheme输入添加选择框
       let schemes = {
         "cfpage": 'cf(cfpage://)',
@@ -196,7 +196,7 @@
       for (let key in schemes) {
         addSelectOption('inputScheme', key, schemes[key]);
       }
-      
+
 
       // type
       let types = {
@@ -213,23 +213,61 @@
         '10021': '打开特定的游戏(10021)',
         '10026': '打开圈子(10026)',
         '10030': '打开私聊(10030)',
+        '10034': '打开小程序(10034)',
         '10042': '打开Flutter页面(10042)',
         '10044': '启动游戏(10044)',
-        
+
       }
 
       for (let key in types) {
         addSelectOption('inputType', key, types[key]);
       }
-      
+    }
 
+    // 根据type自动填充一些必要的参数
+    function setupTypeParams() {
+      let selectElement = document.getElementById("inputType");
+      let paramElement = document.getElementById("inputParams");
+
+      selectElement.addEventListener("change", function () {
+        paramElement.value = "";
+        var selectedValue = selectElement.value;
+        console.log("选择的值为: " + selectedValue);
+
+        // 在这里执行其他操作
+        switch (selectedValue) {
+          case "10002":
+            paramElement.value = '{\n"buttonId": "xxx"\n}';
+            break;
+          case "10015":
+            paramElement.value = '{\n"userId": "xxx", \n"defaultTabKey": "xxx", \n"isHost":false\n}';
+            break;
+          case "10020":
+            paramElement.value = '{\n"groupId": xx, \n"groupType": "xxx"\n}';
+            break;
+          case "10026":
+            paramElement.value = '{\n"cleId": "xxx"\n}';
+            break;
+          case "10030":
+            paramElement.value = '{\n"friendUserId": "xxx"\n}';
+            break;
+            
+          case "10034":
+            paramElement.value = '{\n"id": "xxx", \n"name": "xxx", \n"type":3\n}';
+            break;
+        };
+      });
+    }
+
+    // 恢复记住的最近使用的输入
+    function restoreInput() {
       setInputValue('myInput', localStorage.getItem("myInput"));
 
       let savedScheme = localStorage.getItem("inputScheme");
       if (savedScheme !== null) {
         setInputValue('inputScheme', localStorage.getItem("inputScheme"));
       }
-      
+
       let savedType = localStorage.getItem("inputType");
       if (savedType != null) {
         setInputValue('inputType', localStorage.getItem("inputType"));
@@ -238,10 +276,17 @@
       setInputValue('inputUri', localStorage.getItem("inputUri"));
       setInputValue('inputParams', localStorage.getItem("inputParams"));
 
+    }
+
+    // 初始化代码
+    (function () {
+
+      setupSelectOption();
+      setupTypeParams();
+
+      restoreInput();
 
     })();
-
-  
 
   </script>
 </body>
