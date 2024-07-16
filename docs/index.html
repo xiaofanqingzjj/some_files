@@ -60,119 +60,47 @@
 </head>
 
 <body>
-  <h2>助手Scheme测试页面</h2>
+  <!-- <h2>助手Scheme测试页面</h2>
   <p>在输入框里输入打开助手的Scheme然后点击打开链接</p>
   <textarea type="text" id="myInput" rows="4" placeholder="输入打开助手的scheme"></textarea>
   <div>
     <button onclick="openSchemeLink()">打开链接</button>
     <button onclick="clearSchemeInput()">清空</button>
+  </div> -->
+
+  <p>选择要打开助手的Scheme</p>
+  <select id="inputScheme" class="fill_width">
+  </select>
+
+
+  <p>选择要打开的页面</p>
+  <select id="pageSelect" class="fill_width">
+  </select>
+
+  <p>填写参数</p>
+  <div id="paramsContainer"> 
   </div>
 
-  <p>测试OpenButton</p>
+  <p style="color: green;">button内容</p>
+  <div id="resultButton"></div>
+  <p style="color: green;">外部跳转scheme，iOS用手机safari输入地址栏可以测试</p>
+  <div id="resultScheme"></div>
 
-  <select id="inputScheme" class="fill_width">
-    <option disabled selected value="">选择要打开助手的Scheme</option>
-  </select>
+  <script src="data.js">
+    console.log("++++++++"+window.jsondata);
+  </script>
+  <script src="func.js">
+    console.log("====="+window.jsondata);
+  </script>
 
-  <select id="inputType" class="fill_width">
-    <option disabled selected value="">type, OpenButton的type,比如10003表示打开网页</option>
-  </select>
-
-  <textarea type="text" id="inputUri" rows="4"
-    placeholder="uri, OpenButton的uri，不同的type有不同的类型, 10003这里应该填网页地址，10042这里应该填flutter路由地址"></textarea>
-  <textarea type="text" id="inputParams" rows="4"
-    placeholder='params，必须是json格式，比如:{"key":value, "key2": 22}'></textarea>
-  <textarea type="text" id="inputOtherParams" rows="4"
-    placeholder='others，和button同一级的其他参数，必须是json格式，比如:{"key":value, "key2": 22}'></textarea>
-
-  <div>
-    <button onclick="openButton()">OpenButton</button>
-    <button onclick="clearInput()">Clear</button>
+  <div> 
+    <button onclick="openButton()">生成参数</button>
   </div>
 
 
 
 
   <script>
-
-    // 一些工具函数
-
-    // 获取输入框的值
-    function getInputValue(id) {
-      return document.getElementById(id).value;
-    }
-
-    // 设置输入框的值
-    function setInputValue(id, value) {
-      let input = document.getElementById(id)
-      input.value = value;
-      return input;
-    }
-
-    // 给action添加选项
-    function addSelectOption(selectId, value, text) {
-      let select = document.getElementById(selectId)
-      let option = document.createElement('option');
-      option.value = value;
-      option.text = text;
-      select.appendChild(option);
-      return option;
-    }
-
-
-
-    function openSchemeLink() {
-      // 获取输入框的值
-      let url = getInputValue('myInput');
-      localStorage.setItem("myInput", url)
-      if (url.length > 0) {
-        // 打开新的窗口或标签页
-        window.open(url, '_blank');
-      }
-    }
-
-    function clearSchemeInput() {
-      setInputValue('myInput', "").focus();
-    }
-
-
-    function openButton() {
-
-      let scheme = getInputValue("inputScheme");
-      let type = getInputValue("inputType");
-      let uri = getInputValue("inputUri");
-      let params = getInputValue("inputParams");
-      let otherParams = getInputValue("inputOtherParams");
-
-
-
-      // 保存输入框的值
-      localStorage.setItem("inputScheme", scheme);
-      localStorage.setItem("inputType", type);
-      localStorage.setItem("inputUri", uri);
-      localStorage.setItem("inputParams", params);
-
-      console.log(params);
-
-      let button = {
-        type: type,
-        uri: uri,
-        param: params
-      };
-
-      if (otherParams.length > 0) {
-        otherParams = JSON.parse(otherParams);
-      }
-
-      button = Object.assign(button, otherParams);
-
-
-      console.log(`button: ${button}`);
-
-      scheme = `${scheme}://webopenapi/startApp?action=20003&button=${encodeURIComponent(JSON.stringify(button))}`;
-      window.open(scheme, '_blank');
-
-    }
 
     function clearInput() {
       setInputValue("inputScheme", "");
@@ -185,6 +113,7 @@
 
     // 设置select框的选项
     function setupSelectOption() {
+
       // 给scheme输入添加选择框
       let schemes = {
         "cfpage": 'cf(cfpage://)',
@@ -197,93 +126,30 @@
         addSelectOption('inputScheme', key, schemes[key]);
       }
 
-
-      // type
-      let types = {
-        '10001': '打开活动(10001)',
-        '10002': '资讯列表(10002)',
-        '10003': '普通网页(10003)',
-        '10004': '普通网页，要验证角色(10004)',
-        '10032': '顶部带切角色按钮的网页(10032)',
-        '10033': '底部带切角色按钮的网页(10033)',
-        '10005': '本地路由(10005)',
-        '10015': '个人主页(10015)',
-        '10019': '切换首页底栏(10019)',
-        '10020': '打开聊天室(10020)',
-        '10021': '打开特定的游戏(10021)',
-        '10026': '打开圈子(10026)',
-        '10030': '打开私聊(10030)',
-        '10034': '打开小程序(10034)',
-        '10042': '打开Flutter页面(10042)',
-      }
-
-      for (let key in types) {
-        addSelectOption('inputType', key, types[key]);
+      let selectElement = document.querySelector('#inputScheme');
+  
+      if (selectElement && selectElement.options.length > 0) {
+        selectElement.selectedIndex = 0;
+        // console.log("------------------"+selectElement.options[0].selected);
+        // selectElement.options[0].selected = true;
+        // selectElement.value = selectElement.options[0].value;
       }
     }
 
-    // 根据type自动填充一些必要的参数
-    function setupTypeParams() {
-      let selectElement = document.getElementById("inputType");
-      let paramElement = document.getElementById("inputParams");
+        // 给action添加选项
+    function addSelectOption(selectId, value, text) {
+      let select = document.getElementById(selectId)
+      let option = document.createElement('option');
+      option.value = value;
+      option.text = text;
+      select.appendChild(option);
 
-      selectElement.addEventListener("change", function () {
-        paramElement.value = "";
-        var selectedValue = selectElement.value;
-        console.log("选择的值为: " + selectedValue);
-
-        // 在这里执行其他操作
-        switch (selectedValue) {
-          case "10002":
-            paramElement.value = '{\n"buttonId": "xxx"\n}';
-            break;
-          case "10015":
-            paramElement.value = '{\n"userId": "xxx", \n"defaultTabKey": "xxx", \n"isHost":false\n}';
-            break;
-          case "10020":
-            paramElement.value = '{\n"groupId": xx, \n"groupType": "xxx"\n}';
-            break;
-          case "10026":
-            paramElement.value = '{\n"cleId": "xxx"\n}';
-            break;
-          case "10030":
-            paramElement.value = '{\n"friendUserId": "xxx"\n}';
-            break;
-            
-          case "10034":
-            paramElement.value = '{\n"id": "xxx", \n"name": "xxx", \n"type":3\n}';
-            break;
-        };
-      });
-    }
-
-    // 恢复记住的最近使用的输入
-    function restoreInput() {
-      setInputValue('myInput', localStorage.getItem("myInput"));
-
-      let savedScheme = localStorage.getItem("inputScheme");
-      if (savedScheme !== null) {
-        setInputValue('inputScheme', localStorage.getItem("inputScheme"));
-      }
-
-      let savedType = localStorage.getItem("inputType");
-      if (savedType != null) {
-        setInputValue('inputType', localStorage.getItem("inputType"));
-      }
-
-      setInputValue('inputUri', localStorage.getItem("inputUri"));
-      setInputValue('inputParams', localStorage.getItem("inputParams"));
-
+      return option;
     }
 
     // 初始化代码
     (function () {
-
       setupSelectOption();
-      setupTypeParams();
-
-      restoreInput();
-
     })();
 
   </script>
