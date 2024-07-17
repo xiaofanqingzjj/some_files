@@ -149,17 +149,34 @@ function openButton() {
     label2.id = 'resultSchemeLabel';
     label2.textContent = schemeUrl;
     resultScheme.appendChild(label2);
+    navigator.clipboard.writeText(schemeUrl).then(function() {
+        console.log('复制成功');
+      }, function(err) {
+        console.log('复制失败: ', err);
+      });
 }
 
 
 function openSchemeLink() {
+    console.log('---------------1');
     var resultSchemeLabel = document.getElementById('resultSchemeLabel')
     if (resultSchemeLabel == null) {
         openButton();
     }
-    
+    console.log('---------------2');
     resultSchemeLabel = document.getElementById('resultSchemeLabel')
     var text = resultSchemeLabel.textContent;
-    print(text);
+    console.log('---------'+text);
     window.open(text, '_blank');
+}
+
+function copySchemeLink() {
+    var resultSchemeLabel = document.getElementById('resultSchemeLabel')
+
+    var text = resultSchemeLabel.textContent;
+    navigator.clipboard.writeText(text).then(function() {
+      console.log('复制成功');
+    }, function(err) {
+      console.log('复制失败: ', err);
+    });
 }
