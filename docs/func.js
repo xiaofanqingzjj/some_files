@@ -279,7 +279,11 @@ function openButton() {
 
 
 function openSchemeLink() {
-    openButton();
+    var resultSchemeLabel = document.getElementById('resultSchemeLabel')
+    if (resultSchemeLabel == null) {
+        openButton();
+    }
+    
     document.getElementById('resultSchemeLabel');
     var text = resultSchemeLabel.textContent;
     window.open(text, '_blank');
