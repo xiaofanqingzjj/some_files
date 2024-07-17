@@ -94,8 +94,20 @@ function openButton() {
     let buttonObj = {};
     let paramsContainer = document.getElementById('paramsContainer');
     if (paramsContainer) {
+        if (!selectedObject) {
+            console.log('selectedObject is null');
+            //弹alert提示
+            alert("请先选择要打开的页面");
+
+            return;
+        }
         selectedObject.params.forEach(param => {
             let input = paramsContainer.querySelector(`input[id="${param.key}"]`);
+            // 获取select的值
+            if (!input) {
+                input = paramsContainer.querySelector(`select[id="${param.key}"]`);
+            }
+            
             if (input) {
                 let value;
                 switch (param.type) {
@@ -128,8 +140,13 @@ function openButton() {
         param: paramObj
     };
 
+   // console.log(buttonObj);
+
     // button参数内容
-     let resultButton = document.getElementById('resultButton');
+    let resultButton = document.getElementById('resultButton');
+    while (resultButton.firstChild) {
+        resultButton.removeChild(resultButton.firstChild);
+    }
      let label = document.createElement('label');
      label.textContent = JSON.stringify(buttonObj);
      resultButton.appendChild(label);
@@ -145,10 +162,14 @@ function openButton() {
     //外部吊起cfpage://webopenapi/startApp?paraEncodeType=&action=20003&button=
     var schemeUrl = schemeOption+'://webopenapi/startApp?paraEncodeType=&action=20003&button='+encodedString;
     let resultScheme = document.getElementById('resultScheme');
+    while (resultScheme.firstChild) {
+        resultScheme.removeChild(resultScheme.firstChild);
+    }
     let label2 = document.createElement('resultSchemeLabel');
     label2.id = 'resultSchemeLabel';
     label2.textContent = schemeUrl;
     resultScheme.appendChild(label2);
+
     navigator.clipboard.writeText(schemeUrl).then(function() {
         console.log('复制成功');
       }, function(err) {
@@ -158,15 +179,12 @@ function openButton() {
 
 
 function openSchemeLink() {
-    console.log('---------------1');
     var resultSchemeLabel = document.getElementById('resultSchemeLabel')
     if (resultSchemeLabel == null) {
         openButton();
     }
-    console.log('---------------2');
     resultSchemeLabel = document.getElementById('resultSchemeLabel')
     var text = resultSchemeLabel.textContent;
-    console.log('---------'+text);
     window.open(text, '_blank');
 }
 
