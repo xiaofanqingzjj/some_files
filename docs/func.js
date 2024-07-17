@@ -272,11 +272,15 @@ function openButton() {
     //外部吊起cfpage://webopenapi/startApp?paraEncodeType=&action=20003&button=
     var schemeUrl = schemeOption+'://webopenapi/startApp?paraEncodeType=&action=20003&button='+encodedString;
     let resultScheme = document.getElementById('resultScheme');
-    let label2 = document.createElement('label');
+    let label2 = document.createElement('resultSchemeLabel');
     label2.textContent = schemeUrl;
     resultScheme.appendChild(label2);
 }
 
-function inputv() {
 
+
+function openSchemeLink() {
+    document.getElementById('resultSchemeLabel');
+    var text = resultSchemeLabel.textContent;
+    window.open(text, '_blank');
 }
