@@ -146,6 +146,7 @@ function openButton() {
     var schemeUrl = schemeOption+'://webopenapi/startApp?paraEncodeType=&action=20003&button='+encodedString;
     let resultScheme = document.getElementById('resultScheme');
     let label2 = document.createElement('resultSchemeLabel');
+    label2.id = 'resultSchemeLabel';
     label2.textContent = schemeUrl;
     resultScheme.appendChild(label2);
 }
@@ -157,7 +158,8 @@ function openSchemeLink() {
         openButton();
     }
     
-    document.getElementById('resultSchemeLabel');
+    resultSchemeLabel = document.getElementById('resultSchemeLabel')
     var text = resultSchemeLabel.textContent;
+    print(text);
     window.open(text, '_blank');
 }
