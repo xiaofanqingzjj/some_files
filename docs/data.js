@@ -1259,23 +1259,21 @@
                 "name": "角色id",
                 "type": "int",
                 "desc": "当前用户的角色id",
-                "required": true
+                "required": false
             },
             {
                 "key": "commentId",
                 "name": "评论id",
                 "type": "int",
                 "desc": "跳转到的评论id",
-                "required": false,
-                "lowestVersion": "3.24.0"
+                "required": false
             },
             {
                 "key": "subCommentId",
                 "name": "子评论id",
                 "type": "int",
                 "desc": "要跳转的子评论id",
-                "required": false,
-                "lowestVersion": "3.24.0"
+                "required": false
             },
             {
                 "key": "_isBindRole",
@@ -1322,5 +1320,57 @@
         ],
         "type": 10042,
         "lowestVersion": "3.24.0"
+    },
+    {
+        "name": "打开指定底栏Tab",
+        "uri": "switchHomeTab",
+        "params": [
+            {
+                "key": "buttonId",
+                "name": "底栏buttonId",
+                "type": "int",
+                "desc": "底栏buttonId/type/index三选一即可",
+                "required": false
+            },
+            {
+                "key": "type",
+                "name": "底栏Type",
+                "type": "int",
+                "desc": "底栏buttonId/type/index三选一即可",
+                "required": false
+            },
+            {
+                "key": "index",
+                "name": "底栏index",
+                "type": "int",
+                "desc": "底栏buttonId/type/index三选一即可",
+                "required": false
+            },
+            {
+                "key": "subTabName",
+                "name": "定位至子tab",
+                "type": "String",
+                "desc": "例如个人主页内，subTabName=work，会定位到作品tab",
+                "required": false
+            },
+            {
+                "key": "_isBindRole",
+                "name": "角色绑定提示",
+                "type": "int",
+                "required": "false",
+                "desc": "开启后，当前选中业务无角色时会弹绑定角色提示窗，需要指定业务",
+                "options": [
+                    {
+                        "value": 0,
+                        "desc": "无角色时不提示"
+                    },
+                    {
+                        "value": 1,
+                        "desc": "无角色时弹窗提示"
+                    }
+                ]
+            }
+        ],
+        "type": 10019
     }
 ];
